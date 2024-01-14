@@ -1,3 +1,4 @@
+import * as Const from "../const";
 export const damiMapCollisionTilesArray: number[] = [
   0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
   0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
@@ -58,9 +59,9 @@ export const damiMapCollisionTilesArray: number[] = [
   0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
   0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
 ];
-type collisionMapType = {
-  rowIndex: number;
-  columnIndex: number;
+export type collisionMapType = {
+  x: number;
+  y: number;
 };
 export const getCollisionArrayByColumn = (
   array: number[],
@@ -77,8 +78,15 @@ export const getCollisionArrayByColumn = (
   newArray.forEach((row, rowIndex) => {
     row.forEach((column, columnIndex) => {
       if (column !== collisionNum) return;
-      collisionMap.push({ rowIndex, columnIndex });
+      const x = rowIndex * Const.screenTileSize;
+      const y = columnIndex * Const.screenTileSize;
+      collisionMap.push({ x, y });
     });
   });
   return collisionMap;
 };
+export const collisionArray = getCollisionArrayByColumn(
+  damiMapCollisionTilesArray,
+  Const.mapGridNum.column,
+  Const.collisionIndex
+);

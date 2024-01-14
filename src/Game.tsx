@@ -3,10 +3,13 @@ import { Component, useEffect, useRef, useState } from "react";
 import Player from "./Player";
 import useDirectionHandler from "./customhooks/useDirectionHandler";
 import {
+  collisionArray,
+  collisionMapType,
   damiMapCollisionTilesArray,
   getCollisionArrayByColumn,
 } from "./assets/collisionTiles";
 import * as Const from "./const";
+import { collisionChecker } from "./helpers/collisionChecker";
 type directionType = "up" | "down" | "left" | "right" | undefined;
 
 function Game() {
@@ -28,6 +31,7 @@ function Game() {
     y: 0,
   });
   const direction = useDirectionHandler();
+  let collisionGlobalArray: collisionMapType[] | null = null;
 
   // useEffects -----------------------------------------------------------------------
   useEffect(() => {
@@ -37,20 +41,22 @@ function Game() {
     };
   }, [direction]);
 
-  useEffect(() => {
-    const a = getCollisionArrayByColumn(
-      damiMapCollisionTilesArray,
-      Const.mapGridNum.column,
-      4
-    );
-    console.log(damiMapCollisionTilesArray.filter((e) => e === 4));
-    console.log(a);
-  }, []);
+  useEffect(() => {}, []);
 
   //const functions -----------------------------------------------------------------------
 
   const gameloop = () => {
     directionHandler(direction);
+    collisionArray.forEach((collisionBlock, i) => {
+      collisionChecker({
+        direction,
+        passive: collisionBlock,
+        active: playerPos,
+        callback: () => {
+          console.log("hit");
+        },
+      });
+    });
     gameLoopRef.current = requestAnimationFrame(gameloop);
   };
 
