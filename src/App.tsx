@@ -1,5 +1,4 @@
 import { useState } from "react";
-import "./App.css";
 import Game from "./Game";
 function App() {
   const [count, setCount] = useState(0);
@@ -7,6 +6,7 @@ function App() {
   return (
     <>
       <Game></Game>
+      {/* <div style={{ backgroundColor: "black" }}>asdfdas</div> */}
     </>
   );
 }

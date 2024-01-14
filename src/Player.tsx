@@ -1,26 +1,17 @@
 import * as React from "react";
-import { Component } from "react";
-function Player({
-  x,
-  y,
-  ref,
-}: {
-  x: number;
-  y: number;
-  ref: React.RefObject<HTMLElement> | null;
-}) {
-  const playerStyle: React.CSSProperties = {
-    width: "100px",
-    height: "100px",
-    backgroundColor: "blue",
 
-    transform: `translate(${x}px, ${y}px)`,
-  };
-  return (
-    <>
-      <div style={playerStyle}>player</div>
-    </>
-  );
-}
+const Player = React.forwardRef<HTMLDivElement, { tileSize: number }>(
+  ({ tileSize }, ref) => {
+    const playerStyle: React.CSSProperties = {
+      position: "absolute",
+      width: `${tileSize}px`,
+      height: `${tileSize}px`,
+      backgroundColor: "blue",
+      transform: `translate(calc(50vw), calc(50vh))`,
+    };
+
+    return <div ref={ref} style={playerStyle}></div>;
+  }
+);
 
 export default Player;
