@@ -1,3 +1,5 @@
+import * as Const from '../const'
+
 type directionType = "up" | "down" | "left" | "right" | undefined;
 
 type collisionCheckerType = {

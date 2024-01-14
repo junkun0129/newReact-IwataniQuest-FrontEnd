@@ -6,23 +6,20 @@ import {
   damiMapCollisionTilesArray,
   getCollisionArrayByColumn,
 } from "./assets/collisionTiles";
+import * as Const from "./const";
 type directionType = "up" | "down" | "left" | "right" | undefined;
-type mapGridNum = {
-  column: number;
-  row: number;
-};
 
 function Game() {
   //values -----------------------------------------------------------------------
-  const originalTilesSize: number = 32;
+  const screenWidth =
+    window.innerWidth ||
+    document.documentElement.clientWidth ||
+    document.body.clientWidth;
+  const screenHeight =
+    window.innerHeight ||
+    document.documentElement.clientHeight ||
+    document.body.clientHeight;
 
-  const mapGridNum: mapGridNum = {
-    column: 50,
-    row: 30,
-  };
-  const scale: number = 2;
-  const screenTilesize: number = originalTilesSize * scale;
-  const collisionIndex: number = 4;
   const gameLoopRef = useRef<any>(null);
   const playerRef = useRef<HTMLDivElement>(null);
   const playerSpeed = 10;
@@ -43,7 +40,7 @@ function Game() {
   useEffect(() => {
     const a = getCollisionArrayByColumn(
       damiMapCollisionTilesArray,
-      mapGridNum.column,
+      Const.mapGridNum.column,
       4
     );
     console.log(damiMapCollisionTilesArray.filter((e) => e === 4));
@@ -62,25 +59,25 @@ function Game() {
       case "up":
         setPlayerPos((pre) => ({
           ...pre,
-          y: pre.y + playerSpeed,
+          y: pre.y - playerSpeed,
         }));
         break;
       case "down":
         setPlayerPos((pre) => ({
           ...pre,
-          y: pre.y - playerSpeed,
+          y: pre.y + playerSpeed,
         }));
         break;
       case "left":
         setPlayerPos((pre) => ({
           ...pre,
-          x: pre.x + playerSpeed,
+          x: pre.x - playerSpeed,
         }));
         break;
       case "right":
         setPlayerPos((pre) => ({
           ...pre,
-          x: pre.x - playerSpeed,
+          x: pre.x + playerSpeed,
         }));
         break;
     }
@@ -100,37 +97,17 @@ function Game() {
         <div
           style={{
             position: "absolute",
-            width: `${screenTilesize * mapGridNum.column}px`,
-            height: `${screenTilesize * mapGridNum.row}px`,
+            width: `${Const.screenTileSize * Const.mapGridNum.column}px`,
+            height: `${Const.screenTileSize * Const.mapGridNum.row}px`,
             backgroundColor: "lightskyblue",
-            transform: `translate(${playerPos.x}px, ${playerPos.y}px)`,
+            transform: `translate(${-playerPos.x + screenWidth / 2}px, ${
+              -playerPos.y + screenHeight / 2
+            }px)`,
             backgroundImage: `url(DamiMap.png)`,
             backgroundSize: "cover",
           }}
-        >
-          <div
-            style={{
-              width: `${screenTilesize}px`,
-              height: `${screenTilesize}px`,
-              backgroundColor: "red",
-            }}
-          ></div>
-          <div
-            style={{
-              width: `${screenTilesize}px`,
-              height: `${screenTilesize}px`,
-              backgroundColor: "red",
-            }}
-          ></div>
-          <div
-            style={{
-              width: `${screenTilesize}px`,
-              height: `${screenTilesize}px`,
-              backgroundColor: "red",
-            }}
-          ></div>
-        </div>
-        <Player ref={playerRef} tileSize={screenTilesize}></Player>
+        ></div>
+        <Player ref={playerRef} tileSize={Const.screenTileSize}></Player>
       </div>
     </>
   );
