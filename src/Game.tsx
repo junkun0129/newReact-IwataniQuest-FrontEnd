@@ -10,6 +10,7 @@ import {
 } from "./assets/collisionTiles";
 import * as Const from "./const";
 import { collisionChecker } from "./helpers/collisionChecker";
+import { delay } from "./helpers/delay";
 type directionType = "up" | "down" | "left" | "right" | undefined;
 
 function Game() {
@@ -27,11 +28,11 @@ function Game() {
   const playerRef = useRef<HTMLDivElement>(null);
   const playerSpeed = 10;
   const [playerPos, setPlayerPos] = useState({
-    x: 0,
-    y: 0,
+    x: 1000,
+    y: 600,
   });
+  const [isMoving, setIsMoving] = useState<boolean>(true);
   const direction = useDirectionHandler();
-  let collisionGlobalArray: collisionMapType[] | null = null;
 
   // useEffects -----------------------------------------------------------------------
   useEffect(() => {
@@ -41,26 +42,28 @@ function Game() {
     };
   }, [direction]);
 
-  useEffect(() => {}, []);
-
+  useEffect(() => {
+    console.log(isMoving);
+  }, [isMoving]);
   //const functions -----------------------------------------------------------------------
 
   const gameloop = () => {
-    directionHandler(direction);
     collisionArray.forEach((collisionBlock, i) => {
       collisionChecker({
         direction,
         passive: collisionBlock,
         active: playerPos,
         callback: () => {
-          console.log("hit");
+          setIsMoving(false);
         },
       });
     });
+    directionHandler(direction);
     gameLoopRef.current = requestAnimationFrame(gameloop);
   };
 
   const directionHandler = (direction: directionType) => {
+    if (!isMoving) return;
     switch (direction) {
       case "up":
         setPlayerPos((pre) => ({
@@ -114,6 +117,17 @@ function Game() {
           }}
         ></div>
         <Player ref={playerRef} tileSize={Const.screenTileSize}></Player>
+        <div
+          style={{
+            position: "absolute",
+            width: `${Const.screenTileSize}px`,
+            height: `${Const.screenTileSize}px`,
+            backgroundColor: "red",
+            transform: `translate(${-playerPos.x + screenWidth / 2}px, ${
+              -playerPos.y + screenHeight / 2
+            }px)`,
+          }}
+        ></div>
       </div>
     </>
   );

@@ -78,8 +78,8 @@ export const getCollisionArrayByColumn = (
   newArray.forEach((row, rowIndex) => {
     row.forEach((column, columnIndex) => {
       if (column !== collisionNum) return;
-      const x = rowIndex * Const.screenTileSize;
-      const y = columnIndex * Const.screenTileSize;
+      const x = columnIndex * Const.screenTileSize;
+      const y = rowIndex * Const.screenTileSize;
       collisionMap.push({ x, y });
     });
   });
