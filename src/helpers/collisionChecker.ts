@@ -21,7 +21,6 @@ export const collisionChecker = ({
 }: collisionCheckerType) => {
   let passiveX: number = passive.x - active.x;
   let passiveY: number = passive.y - active.y;
-
   switch (direction) {
     case "up": {
       if (

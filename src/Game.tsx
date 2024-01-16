@@ -40,14 +40,9 @@ function Game() {
     return () => {
       cancelAnimationFrame(gameLoopRef.current);
     };
-  }, [direction]);
+  }, [direction, isMoving]);
 
   useEffect(() => {
-    console.log(isMoving);
-  }, [isMoving]);
-  //const functions -----------------------------------------------------------------------
-
-  const gameloop = () => {
     collisionArray.forEach((collisionBlock, i) => {
       collisionChecker({
         direction,
@@ -58,6 +53,10 @@ function Game() {
         },
       });
     });
+  }, [playerPos]);
+
+  //const functions -----------------------------------------------------------------------
+  const gameloop = () => {
     directionHandler(direction);
     gameLoopRef.current = requestAnimationFrame(gameloop);
   };
