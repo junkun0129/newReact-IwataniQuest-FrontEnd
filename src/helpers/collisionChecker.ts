@@ -12,7 +12,7 @@ type collisionCheckerType = {
   active: elementType;
   callback: () => void;
 };
-
+console.log("object");
 export const collisionChecker = ({
   direction,
   passive,
