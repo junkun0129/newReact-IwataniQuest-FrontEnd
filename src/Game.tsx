@@ -55,6 +55,29 @@ function Game() {
     });
   }, [playerPos]);
 
+  useEffect(() => {
+    let isCollision = false;
+    if (direction) {
+      collisionArray.forEach((collisionBlock, i) => {
+        collisionChecker({
+          direction,
+          passive: collisionBlock,
+          active: playerPos,
+          callback: () => {
+            setIsMoving(false);
+            isCollision = true;
+          },
+        });
+      });
+    } else {
+      isCollision = true;
+    }
+
+    if (!isCollision) {
+      setIsMoving(true);
+    }
+  }, [direction]);
+
   //const functions -----------------------------------------------------------------------
   const gameloop = () => {
     directionHandler(direction);
