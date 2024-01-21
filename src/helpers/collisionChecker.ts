@@ -1,6 +1,5 @@
 import * as Const from "../const";
-
-type directionType = "up" | "down" | "left" | "right" | undefined;
+import { directionType } from "../types/playerTypes";
 
 export type elementType = {
   x: number;

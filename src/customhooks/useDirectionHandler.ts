@@ -1,7 +1,6 @@
 import * as React from "react";
 import { useEffect } from "react";
-
-type directionType = "up" | "down" | "left" | "right" | undefined;
+import { directionType } from "../types/playerTypes";
 
 function useDirectionHandler() {
   const [heldDirection, setHeldDirection] = React.useState<directionType[]>([]);

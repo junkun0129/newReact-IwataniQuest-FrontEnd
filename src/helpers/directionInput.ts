@@ -1,4 +1,4 @@
-type directionType = "up" | "down" | "left" | "right" | undefined;
+import { directionType } from "../types/playerTypes";
 
 export const directionInput = (heldDirection: directionType[]) => {
   const handleKeyDown = (e: KeyboardEvent) => {

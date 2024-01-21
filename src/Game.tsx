@@ -11,29 +11,15 @@ import {
 import * as Const from "./const";
 import { collisionChecker } from "./helpers/collisionChecker";
 import { delay } from "./helpers/delay";
-type directionType = "up" | "down" | "left" | "right" | undefined;
+import Map from "./Map";
+import { directionType, playerPosType } from "./types/playerTypes";
+import usePlayer from "./customhooks/usePlayer";
 
 function Game() {
   //values -----------------------------------------------------------------------
-  const screenWidth =
-    window.innerWidth ||
-    document.documentElement.clientWidth ||
-    document.body.clientWidth;
-  const screenHeight =
-    window.innerHeight ||
-    document.documentElement.clientHeight ||
-    document.body.clientHeight;
 
   const gameLoopRef = useRef<any>(null);
-  const playerRef = useRef<HTMLDivElement>(null);
-  const playerSpeed = 10;
-  const [playerPos, setPlayerPos] = useState({
-    x: 1000,
-    y: 600,
-  });
-  const [isMoving, setIsMoving] = useState<boolean>(true);
-  const direction = useDirectionHandler();
-
+  const { direction, isMoving, playerPos, Player, playerUpdate } = usePlayer();
   // useEffects -----------------------------------------------------------------------
   useEffect(() => {
     gameloop();
@@ -42,76 +28,10 @@ function Game() {
     };
   }, [direction, isMoving]);
 
-  useEffect(() => {
-    collisionArray.forEach((collisionBlock, i) => {
-      collisionChecker({
-        direction,
-        passive: collisionBlock,
-        active: playerPos,
-        callback: () => {
-          setIsMoving(false);
-        },
-      });
-    });
-  }, [playerPos]);
-
-  useEffect(() => {
-    let isCollision = false;
-    if (direction) {
-      collisionArray.forEach((collisionBlock, i) => {
-        collisionChecker({
-          direction,
-          passive: collisionBlock,
-          active: playerPos,
-          callback: () => {
-            setIsMoving(false);
-            isCollision = true;
-          },
-        });
-      });
-    } else {
-      isCollision = true;
-    }
-
-    if (!isCollision) {
-      setIsMoving(true);
-    }
-  }, [direction]);
-
   //const functions -----------------------------------------------------------------------
   const gameloop = () => {
-    directionHandler(direction);
+    playerUpdate();
     gameLoopRef.current = requestAnimationFrame(gameloop);
-  };
-
-  const directionHandler = (direction: directionType) => {
-    if (!isMoving) return;
-    switch (direction) {
-      case "up":
-        setPlayerPos((pre) => ({
-          ...pre,
-          y: pre.y - playerSpeed,
-        }));
-        break;
-      case "down":
-        setPlayerPos((pre) => ({
-          ...pre,
-          y: pre.y + playerSpeed,
-        }));
-        break;
-      case "left":
-        setPlayerPos((pre) => ({
-          ...pre,
-          x: pre.x - playerSpeed,
-        }));
-        break;
-      case "right":
-        setPlayerPos((pre) => ({
-          ...pre,
-          x: pre.x + playerSpeed,
-        }));
-        break;
-    }
   };
 
   return (
@@ -125,31 +45,8 @@ function Game() {
           overflow: "hidden",
         }}
       >
-        <div
-          style={{
-            position: "absolute",
-            width: `${Const.screenTileSize * Const.mapGridNum.column}px`,
-            height: `${Const.screenTileSize * Const.mapGridNum.row}px`,
-            backgroundColor: "lightskyblue",
-            transform: `translate(${-playerPos.x + screenWidth / 2}px, ${
-              -playerPos.y + screenHeight / 2
-            }px)`,
-            backgroundImage: `url(DamiMap.png)`,
-            backgroundSize: "cover",
-          }}
-        ></div>
-        <Player ref={playerRef} tileSize={Const.screenTileSize}></Player>
-        <div
-          style={{
-            position: "absolute",
-            width: `${Const.screenTileSize}px`,
-            height: `${Const.screenTileSize}px`,
-            backgroundColor: "red",
-            transform: `translate(${-playerPos.x + screenWidth / 2}px, ${
-              -playerPos.y + screenHeight / 2
-            }px)`,
-          }}
-        ></div>
+        <Map x={playerPos.x} y={playerPos.y}></Map>
+        <Player></Player>
       </div>
     </>
   );
