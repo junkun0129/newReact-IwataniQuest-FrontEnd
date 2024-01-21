@@ -1,18 +1,6 @@
 import * as React from "react";
 import { Component, useEffect, useRef, useState } from "react";
-import Player from "./Player";
-import useDirectionHandler from "./customhooks/useDirectionHandler";
-import {
-  collisionArray,
-  collisionMapType,
-  damiMapCollisionTilesArray,
-  getCollisionArrayByColumn,
-} from "./assets/collisionTiles";
-import * as Const from "./const";
-import { collisionChecker } from "./helpers/collisionChecker";
-import { delay } from "./helpers/delay";
 import Map from "./Map";
-import { directionType, playerPosType } from "./types/playerTypes";
 import usePlayer from "./customhooks/usePlayer";
 
 function Game() {

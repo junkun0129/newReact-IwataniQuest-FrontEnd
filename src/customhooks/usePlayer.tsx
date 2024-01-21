@@ -15,9 +15,7 @@ function usePlayer() {
   const [preCollisionDirection, setPreCollisionDirection] =
     useState<directionType>();
 
-  useEffect(() => {
-    console.log("direction :>> ", direction);
-  }, [direction]);
+  //observe collision by player's position
   useEffect(() => {
     collisionArray.forEach((collisionBlock, i) => {
       collisionChecker({
@@ -32,6 +30,7 @@ function usePlayer() {
     });
   }, [playerPos]);
 
+  //observe collision when player's direction changes
   useEffect(() => {
     let isCollision = false;
     if (direction) {
@@ -102,6 +101,7 @@ function usePlayer() {
   const playerUpdate = () => {
     directionHandler(direction);
   };
+
   const Player = () => {
     const playerStyle: React.CSSProperties = {
       position: "absolute",
