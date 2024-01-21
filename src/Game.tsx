@@ -2,6 +2,7 @@ import * as React from "react";
 import { Component, useEffect, useRef, useState } from "react";
 import Map from "./Map";
 import usePlayer from "./customhooks/usePlayer";
+import usePictureChange from "./customhooks/usePictureChange";
 
 function Game() {
   //values -----------------------------------------------------------------------

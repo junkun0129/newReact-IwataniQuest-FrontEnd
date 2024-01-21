@@ -1,7 +1,11 @@
 import * as React from "react";
 import { Component, useEffect, useState } from "react";
 import * as Const from "../const";
-import { directionType, playerPosType } from "../types/playerTypes";
+import {
+  directionType,
+  picturePxType,
+  playerPosType,
+} from "../types/playerTypes";
 import useDirectionHandler from "./useDirectionHandler";
 import { collisionArray } from "../assets/collisionTiles";
 import { collisionChecker } from "../helpers/collisionChecker";
@@ -15,7 +19,16 @@ function usePlayer() {
   const [preCollisionDirection, setPreCollisionDirection] =
     useState<directionType>();
 
-  //observe collision by player's position
+  const [frameCount, setFrameCount] = useState<number>(0);
+  const [picturePx, setPicturePx] = useState<picturePxType>({
+    column: 0,
+    row: 0,
+  });
+
+  const [prePictureDirection, setPrePictureDirection] =
+    useState<directionType>();
+
+  //observe collision by player's position on the DOM
   useEffect(() => {
     collisionArray.forEach((collisionBlock, i) => {
       collisionChecker({
@@ -34,6 +47,7 @@ function usePlayer() {
   useEffect(() => {
     let isCollision = false;
     if (direction) {
+      setPrePictureDirection(direction);
       collisionArray.forEach((collisionBlock, i) => {
         collisionChecker({
           direction,
@@ -98,8 +112,23 @@ function usePlayer() {
     }
   };
 
+  //sprite controll
+  useEffect(() => {
+    setPicturePx(
+      Const.spriteController(direction, frameCount, prePictureDirection)
+    );
+    if (frameCount > 20) {
+      setFrameCount(0);
+    }
+  }, [frameCount]);
+
+  useEffect(() => {
+    console.log(prePictureDirection);
+  }, [prePictureDirection]);
+
   const playerUpdate = () => {
     directionHandler(direction);
+    setFrameCount((pre) => pre + 1);
   };
 
   const Player = () => {
@@ -107,11 +136,14 @@ function usePlayer() {
       position: "absolute",
       width: `${Const.screenTileSize}px`,
       height: `${Const.screenTileSize}px`,
-      backgroundColor: "blue",
+      backgroundImage: "url(sample.png)",
+      backgroundPosition: `${picturePx.row}px ${picturePx.column}px`,
+      // backgroundSize: `300%`,
       transform: `translate(calc(50vw), calc(50vh))`,
     };
     return <div style={playerStyle}></div>;
   };
+
   return {
     direction,
     playerPos,
