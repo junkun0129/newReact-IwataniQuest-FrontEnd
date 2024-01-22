@@ -9,6 +9,7 @@ import {
 import useDirectionHandler from "./useDirectionHandler";
 import { collisionArray } from "../assets/collisionTiles";
 import { collisionChecker } from "../helpers/collisionChecker";
+import useCollisionController from "./useCollisionController";
 function usePlayer() {
   const direction = useDirectionHandler();
   const [playerPos, setPlayerPos] = useState<playerPosType>({
@@ -28,62 +29,41 @@ function usePlayer() {
   const [prePictureDirection, setPrePictureDirection] =
     useState<directionType>();
 
+  const { collisionController } = useCollisionController({
+    active: playerPos,
+    direction,
+  });
+
   //observe collision by player's position on the DOM
   useEffect(() => {
-    collisionArray.forEach((collisionBlock, i) => {
-      collisionChecker({
-        direction,
-        passive: collisionBlock,
-        active: playerPos,
-        callback: () => {
-          setIsMoving(false);
-          setPreCollisionDirection(direction);
-        },
-      });
-    });
+    const isCollision = collisionController();
+    if (isCollision) {
+      setIsMoving(false);
+      setPreCollisionDirection(direction);
+    }
   }, [playerPos]);
 
   //observe collision when player's direction changes
   useEffect(() => {
-    let isCollision = false;
     if (direction) {
       setPrePictureDirection(direction);
-      collisionArray.forEach((collisionBlock, i) => {
-        collisionChecker({
-          direction,
-          passive: collisionBlock,
-          active: playerPos,
-          callback: () => {
-            setIsMoving(false);
-            isCollision = true;
-          },
-        });
-      });
-    } else {
-      isCollision = true;
+      const isCollision = collisionController();
+      if (isCollision) return;
     }
-
-    if (!isCollision) {
-      setIsMoving(true);
-    }
+    setIsMoving(true);
   }, [direction]);
 
   const directionHandler = (direction: directionType) => {
     let isCalled: boolean = false;
     if (!isMoving) return;
     if (preCollisionDirection === direction) {
-      collisionArray.forEach((collisionBlock, i) => {
-        collisionChecker({
-          direction,
-          passive: collisionBlock,
-          active: playerPos,
-          callback: () => {
-            isCalled = true;
-          },
-        });
-      });
+      const isCollision = collisionController();
+      if (isCollision) {
+        isCalled = true;
+      }
     }
     if (isCalled) return;
+
     switch (direction) {
       case "up":
         setPlayerPos((pre) => ({
@@ -122,10 +102,7 @@ function usePlayer() {
     }
   }, [frameCount]);
 
-  useEffect(() => {
-    console.log(prePictureDirection);
-  }, [prePictureDirection]);
-
+  //update
   const playerUpdate = () => {
     directionHandler(direction);
     setFrameCount((pre) => pre + 1);

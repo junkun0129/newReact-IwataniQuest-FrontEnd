@@ -3,12 +3,15 @@ import { Component, useEffect, useRef, useState } from "react";
 import Map from "./Map";
 import usePlayer from "./customhooks/usePlayer";
 import usePictureChange from "./customhooks/usePictureChange";
+import useNPCs from "./customhooks/useNPCs";
+import * as Const from "./const";
 
 function Game() {
   //values -----------------------------------------------------------------------
 
   const gameLoopRef = useRef<any>(null);
   const { direction, isMoving, playerPos, Player, playerUpdate } = usePlayer();
+  const { NPCs } = useNPCs();
   // useEffects -----------------------------------------------------------------------
   useEffect(() => {
     gameloop();
@@ -36,6 +39,7 @@ function Game() {
       >
         <Map x={playerPos.x} y={playerPos.y}></Map>
         <Player></Player>
+        <NPCs x={playerPos.x} y={playerPos.y}></NPCs>
       </div>
     </>
   );

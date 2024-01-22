@@ -1,3 +1,4 @@
+import { collisionArray } from "../assets/collisionTiles";
 import * as Const from "../const";
 import { directionType } from "../types/playerTypes";
 
@@ -11,7 +12,6 @@ type collisionCheckerType = {
   active: elementType;
   callback: () => void;
 };
-console.log("object");
 export const collisionChecker = ({
   direction,
   passive,
