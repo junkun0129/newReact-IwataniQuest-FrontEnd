@@ -10,8 +10,9 @@ function Game() {
   //values -----------------------------------------------------------------------
 
   const gameLoopRef = useRef<any>(null);
-  const { direction, isMoving, playerPos, Player, playerUpdate } = usePlayer();
-  const { NPCs } = useNPCs();
+  const { NPCs, npcPosArray } = useNPCs();
+  const { direction, isMoving, playerPos, Player, playerUpdate } =
+    usePlayer(npcPosArray);
   // useEffects -----------------------------------------------------------------------
   useEffect(() => {
     gameloop();
@@ -38,8 +39,8 @@ function Game() {
         }}
       >
         <Map x={playerPos.x} y={playerPos.y}></Map>
-        <Player></Player>
         <NPCs x={playerPos.x} y={playerPos.y}></NPCs>
+        <Player></Player>
       </div>
     </>
   );

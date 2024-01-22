@@ -1,39 +1,41 @@
 import * as React from "react";
-import { Component, useEffect } from "react";
+import { Component, useEffect, useState } from "react";
 import * as Const from "../const";
-import { playerPosType } from "../types/playerTypes";
-const npcInstances = [{ id: 123123 }, { id: 21232 }];
+import { npcInstaceType, playerPosType } from "../types/playerTypes";
+
+const npcInstances: npcInstaceType[] = [
+  { id: 123123, x: 605, y: 380 },
+  { id: 21232, x: 800, y: 500 },
+];
+
 function useNPCs() {
-  const npcStyle: React.CSSProperties = {
-    position: "absolute",
-    width: `${Const.screenTileSize}px`,
-    height: `${Const.screenTileSize}px`,
-    backgroundImage: "url(sample.png)",
-    backgroundPosition: `${0}px ${0}px`,
-    // backgroundSize: `300%`,
-    transform: `translate(calc(50vw), calc(50vh))`,
-  };
+  const [npcPosArray, setNpcPosArray] =
+    useState<npcInstaceType[]>(npcInstances);
 
-  const NPCs = ({ x, y }: playerPosType) => {
-    useEffect(() => {
-      console.log("x :>> ", x);
-      console.log("y :>> ", y);
-    }, [x, y]);
-    const playerStyle: React.CSSProperties = {
-      position: "absolute",
-      width: `${Const.screenTileSize}px`,
-      height: `${Const.screenTileSize}px`,
-      backgroundImage: "url(sample.png)",
-      backgroundPosition: `${0}px ${0}px`,
-      transform: `translate(${-x + Const.screenWidth / 2 + 700}px, ${
-        -y + Const.screenHeight / 2 + 300
-      }px)`,
-      backgroundColor: "red",
+  const NPCs = (player: playerPosType) => {
+    const npcStyle = (npcX: number, npcY: number): React.CSSProperties => {
+      return {
+        position: "absolute",
+        width: `${Const.screenTileSize}px`,
+        height: `${Const.screenTileSize}px`,
+        backgroundImage: "url(sample.png)",
+        // backgroundPosition: `${0}px ${0}px`,
+        transform: `translate(${-player.x + Const.screenWidth / 2 + npcX}px, ${
+          -player.y + Const.screenHeight / 2 + npcY
+        }px)`,
+      };
     };
-    return <div style={playerStyle}></div>;
+
+    return (
+      <>
+        {npcPosArray.map((npc, i) => {
+          return <div key={i} style={npcStyle(npc.x, npc.y)}></div>;
+        })}
+      </>
+    );
   };
 
-  return { NPCs };
+  return { NPCs, npcPosArray };
 }
 
 export default useNPCs;

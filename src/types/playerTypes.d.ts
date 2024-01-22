@@ -8,3 +8,9 @@ export type picturePxType = {
   column: number;
   row: number;
 };
+
+export type npcInstaceType = {
+  id: number;
+  x: number;
+  y: number;
+};

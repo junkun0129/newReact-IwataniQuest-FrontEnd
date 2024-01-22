@@ -27,7 +27,7 @@ export const collisionChecker = ({
         active.x <= passiveX + Const.screenTileSize + passive.x - 3 &&
         active.y + Const.screenTileSize >= passiveY + passive.y &&
         active.y <=
-          passiveY + Const.screenTileSize + passive.y + Const.screenTileSize * 2
+          passiveY + Const.screenTileSize + passive.y + Const.screenTileSize / 2
       ) {
         callback();
       }
@@ -37,7 +37,8 @@ export const collisionChecker = ({
       if (
         active.x + Const.screenTileSize >= passiveX + passive.x &&
         active.x <= passiveX + Const.screenTileSize + passive.x &&
-        active.y + Const.screenTileSize + 80 >= passiveY + passive.y &&
+        active.y + Const.screenTileSize + 80 >=
+          passiveY + passive.y + Const.screenTileSize &&
         active.y <= passiveY + Const.screenTileSize + passive.y - 20
       ) {
         callback();
@@ -48,10 +49,7 @@ export const collisionChecker = ({
       if (
         active.x + Const.screenTileSize >= passiveX + passive.x &&
         active.x <=
-          passiveX +
-            Const.screenTileSize +
-            passive.x +
-            Const.screenTileSize * 2 &&
+          passiveX + Const.screenTileSize + passive.x + Const.screenTileSize &&
         active.y + Const.screenTileSize >= passiveY + passive.y - 20 &&
         active.y <= passiveY + Const.screenTileSize + passive.y - 20
       ) {

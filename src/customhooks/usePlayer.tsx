@@ -3,14 +3,14 @@ import { Component, useEffect, useState } from "react";
 import * as Const from "../const";
 import {
   directionType,
+  npcInstaceType,
   picturePxType,
   playerPosType,
 } from "../types/playerTypes";
 import useDirectionHandler from "./useDirectionHandler";
-import { collisionArray } from "../assets/collisionTiles";
-import { collisionChecker } from "../helpers/collisionChecker";
 import useCollisionController from "./useCollisionController";
-function usePlayer() {
+
+function usePlayer(npcPosArray: npcInstaceType[]) {
   const direction = useDirectionHandler();
   const [playerPos, setPlayerPos] = useState<playerPosType>({
     x: 1000,
@@ -29,15 +29,19 @@ function usePlayer() {
   const [prePictureDirection, setPrePictureDirection] =
     useState<directionType>();
 
-  const { collisionController } = useCollisionController({
-    active: playerPos,
-    direction,
-  });
+  const { collisionController, npcCollisionController } =
+    useCollisionController({
+      active: playerPos,
+      direction,
+      npcPosArray,
+    });
 
   //observe collision by player's position on the DOM
   useEffect(() => {
     const isCollision = collisionController();
-    if (isCollision) {
+    const isNpcCollision = npcCollisionController();
+
+    if (isCollision || isNpcCollision) {
       setIsMoving(false);
       setPreCollisionDirection(direction);
     }
@@ -48,7 +52,8 @@ function usePlayer() {
     if (direction) {
       setPrePictureDirection(direction);
       const isCollision = collisionController();
-      if (isCollision) return;
+      const isNpcCollision = npcCollisionController();
+      if (isCollision || isNpcCollision) return;
     }
     setIsMoving(true);
   }, [direction]);
@@ -58,7 +63,8 @@ function usePlayer() {
     if (!isMoving) return;
     if (preCollisionDirection === direction) {
       const isCollision = collisionController();
-      if (isCollision) {
+      const isNpcCollision = npcCollisionController();
+      if (isCollision || isNpcCollision) {
         isCalled = true;
       }
     }
