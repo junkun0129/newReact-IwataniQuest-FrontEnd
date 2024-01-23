@@ -9,8 +9,10 @@ import {
 } from "../types/playerTypes";
 import useDirectionHandler from "./useDirectionHandler";
 import useCollisionController from "./useCollisionController";
-
-function usePlayer(npcPosArray: npcInstaceType[]) {
+import { useAppDispatch } from "../store/store";
+import { startTalking } from "../store/slices/fieldStateSlice";
+function usePlayer(npcArray: npcInstaceType[]) {
+  const dispatch = useAppDispatch();
   const direction = useDirectionHandler();
   const [playerPos, setPlayerPos] = useState<playerPosType>({
     x: 1000,
@@ -33,15 +35,18 @@ function usePlayer(npcPosArray: npcInstaceType[]) {
     useCollisionController({
       active: playerPos,
       direction,
-      npcPosArray,
+      npcArray,
     });
 
   //observe collision by player's position on the DOM
   useEffect(() => {
     const isCollision = collisionController();
-    const isNpcCollision = npcCollisionController();
+    const collisionNpc = npcCollisionController();
 
-    if (isCollision || isNpcCollision) {
+    if (isCollision || collisionNpc) {
+      if (collisionNpc) {
+        dispatch(startTalking(collisionNpc.dialog));
+      }
       setIsMoving(false);
       setPreCollisionDirection(direction);
     }

@@ -11,12 +11,12 @@ import { collisionChecker } from "../helpers/collisionChecker";
 type useCollisionControllerProps = {
   active: playerPosType;
   direction: directionType;
-  npcPosArray: npcInstaceType[];
+  npcArray: npcInstaceType[];
 };
 function useCollisionController({
   active,
   direction,
-  npcPosArray,
+  npcArray,
 }: useCollisionControllerProps) {
   let isCollision = false;
 
@@ -35,20 +35,20 @@ function useCollisionController({
     return isCollision;
   };
 
-  let isCollisionNpc = false;
+  let CollisionNpc: npcInstaceType | null;
   const npcCollisionController = () => {
-    npcPosArray.forEach((collisionBlock, i) => {
+    npcArray.forEach((collisionBlock, i) => {
       collisionChecker({
         direction,
         passive: collisionBlock,
         active,
         callback: () => {
-          isCollisionNpc = true;
+          CollisionNpc = npcArray[i];
         },
       });
     });
 
-    return isCollisionNpc;
+    return CollisionNpc;
   };
 
   return { collisionController, npcCollisionController };

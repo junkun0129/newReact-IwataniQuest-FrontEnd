@@ -2,15 +2,10 @@ import * as React from "react";
 import { Component, useEffect, useState } from "react";
 import * as Const from "../const";
 import { npcInstaceType, playerPosType } from "../types/playerTypes";
-
-const npcInstances: npcInstaceType[] = [
-  { id: 123123, x: 605, y: 380 },
-  { id: 21232, x: 800, y: 500 },
-];
+import { npcInstances } from "../assets/npcs";
 
 function useNPCs() {
-  const [npcPosArray, setNpcPosArray] =
-    useState<npcInstaceType[]>(npcInstances);
+  const [npcArray, setNpcArray] = useState<npcInstaceType[]>(npcInstances);
 
   const NPCs = (player: playerPosType) => {
     const npcStyle = (npcX: number, npcY: number): React.CSSProperties => {
@@ -28,14 +23,14 @@ function useNPCs() {
 
     return (
       <>
-        {npcPosArray.map((npc, i) => {
+        {npcArray.map((npc, i) => {
           return <div key={i} style={npcStyle(npc.x, npc.y)}></div>;
         })}
       </>
     );
   };
 
-  return { NPCs, npcPosArray };
+  return { NPCs, npcArray };
 }
 
 export default useNPCs;

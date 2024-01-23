@@ -9,8 +9,10 @@ export type picturePxType = {
   row: number;
 };
 
+export type dialogType = string[];
 export type npcInstaceType = {
   id: number;
   x: number;
   y: number;
+  dialog: dialogType;
 };

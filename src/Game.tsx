@@ -5,14 +5,15 @@ import usePlayer from "./customhooks/usePlayer";
 import usePictureChange from "./customhooks/usePictureChange";
 import useNPCs from "./customhooks/useNPCs";
 import * as Const from "./const";
+import Dialog from "./Dialog";
 
 function Game() {
   //values -----------------------------------------------------------------------
 
   const gameLoopRef = useRef<any>(null);
-  const { NPCs, npcPosArray } = useNPCs();
+  const { NPCs, npcArray } = useNPCs();
   const { direction, isMoving, playerPos, Player, playerUpdate } =
-    usePlayer(npcPosArray);
+    usePlayer(npcArray);
   // useEffects -----------------------------------------------------------------------
   useEffect(() => {
     gameloop();
@@ -20,6 +21,10 @@ function Game() {
       cancelAnimationFrame(gameLoopRef.current);
     };
   }, [direction, isMoving]);
+
+  useEffect(() => {
+    console.log("isMoving :>> ", isMoving);
+  }, [isMoving]);
 
   //const functions -----------------------------------------------------------------------
   const gameloop = () => {
@@ -38,9 +43,11 @@ function Game() {
           overflow: "hidden",
         }}
       >
-        <Map x={playerPos.x} y={playerPos.y}></Map>
-        <NPCs x={playerPos.x} y={playerPos.y}></NPCs>
-        <Player></Player>
+        <Map x={playerPos.x} y={playerPos.y} />
+        <NPCs x={playerPos.x} y={playerPos.y} />
+        {/* {!isMoving && <Dialog />} */}
+        <Dialog></Dialog>
+        <Player />
       </div>
     </>
   );
