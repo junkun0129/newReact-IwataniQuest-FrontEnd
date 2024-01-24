@@ -22,10 +22,6 @@ function Game() {
     };
   }, [direction, isMoving]);
 
-  useEffect(() => {
-    console.log("isMoving :>> ", isMoving);
-  }, [isMoving]);
-
   //const functions -----------------------------------------------------------------------
   const gameloop = () => {
     playerUpdate();

@@ -1,11 +1,14 @@
 import * as React from "react";
-import { Component } from "react";
+import { Component, useEffect } from "react";
 import * as Const from "./const";
+import { useAppSelector } from "./store/store";
 type PlayerPosType = {
   x: number;
   y: number;
 };
 function Map({ x, y }: PlayerPosType) {
+  const mapAsset = useAppSelector((state) => state.mapStateReducer.mapAsset);
+
   return (
     <>
       <div
@@ -17,7 +20,7 @@ function Map({ x, y }: PlayerPosType) {
           transform: `translate(${-x + Const.screenWidth / 2}px, ${
             -y + Const.screenHeight / 2
           }px)`,
-          backgroundImage: `url(DamiMap.png)`,
+          backgroundImage: `url(${mapAsset.mapUrl})`,
           backgroundSize: "cover",
         }}
       ></div>

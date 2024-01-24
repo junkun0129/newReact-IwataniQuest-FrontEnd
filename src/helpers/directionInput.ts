@@ -19,8 +19,6 @@ export const directionInput = (heldDirection: directionType[]) => {
   };
 
   const handleKeyUp = (e: KeyboardEvent) => {
-    console.log("upppp");
-
     switch (e.key) {
       case "ArrowUp":
         onReleased("up");

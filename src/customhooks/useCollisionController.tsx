@@ -7,6 +7,7 @@ import {
   playerPosType,
 } from "../types/playerTypes";
 import { collisionChecker } from "../helpers/collisionChecker";
+import { useAppSelector } from "../store/store";
 
 type useCollisionControllerProps = {
   active: playerPosType;
@@ -18,10 +19,12 @@ function useCollisionController({
   direction,
   npcArray,
 }: useCollisionControllerProps) {
+  const mapState = useAppSelector((state) => state.mapStateReducer.mapAsset);
+
   let isCollision = false;
 
   const collisionController = () => {
-    collisionArray.forEach((collisionBlock, i) => {
+    mapState.collisionTileArray.forEach((collisionBlock, i) => {
       collisionChecker({
         direction,
         passive: collisionBlock,

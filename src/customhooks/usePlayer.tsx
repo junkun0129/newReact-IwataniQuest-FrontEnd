@@ -9,10 +9,13 @@ import {
 } from "../types/playerTypes";
 import useDirectionHandler from "./useDirectionHandler";
 import useCollisionController from "./useCollisionController";
-import { useAppDispatch } from "../store/store";
+import { useAppDispatch, useAppSelector } from "../store/store";
 import { startTalking } from "../store/slices/fieldStateSlice";
 function usePlayer(npcArray: npcInstaceType[]) {
   const dispatch = useAppDispatch();
+  const fieldState = useAppSelector(
+    (state) => state.fieldStateReducer.fieldState
+  );
   const direction = useDirectionHandler();
   const [playerPos, setPlayerPos] = useState<playerPosType>({
     x: 1000,
@@ -64,6 +67,7 @@ function usePlayer(npcArray: npcInstaceType[]) {
   }, [direction]);
 
   const directionHandler = (direction: directionType) => {
+    // if (fieldState !== "walk") return;
     let isCalled: boolean = false;
     if (!isMoving) return;
     if (preCollisionDirection === direction) {
@@ -115,6 +119,7 @@ function usePlayer(npcArray: npcInstaceType[]) {
 
   //update
   const playerUpdate = () => {
+    if (fieldState !== "walk") return;
     directionHandler(direction);
     setFrameCount((pre) => pre + 1);
   };

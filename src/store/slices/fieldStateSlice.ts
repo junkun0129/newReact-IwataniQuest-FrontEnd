@@ -4,12 +4,12 @@ import { dialogType } from "../../types/playerTypes";
 
 type initialStateType = {
   fieldState: fieldStateType;
-  dialog: dialogType;
+  dialog: dialogType | null;
 };
 
 const initialState: initialStateType = {
   fieldState: "walk",
-  dialog: [""],
+  dialog: null,
 };
 export const fieldStateSlice = createSlice({
   name: "fieldState",
@@ -24,7 +24,7 @@ export const fieldStateSlice = createSlice({
     endTalking: (state, action: PayloadAction) => {
       return {
         fieldState: "walk",
-        dialog: [""],
+        dialog: null,
       };
     },
   },

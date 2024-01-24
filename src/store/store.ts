@@ -7,7 +7,7 @@ import { useDispatch, useSelector } from "react-redux";
 import { TypedUseSelectorHook } from "react-redux";
 import { defaultValueReducer } from "./slices/defaultValuesSlice";
 import { fieldStateReducer } from "./slices/fieldStateSlice";
-
+import { mapStateReducer } from "./slices/MapStateSlice";
 const persistConfig = {
   key: "root",
   version: 1,
@@ -17,6 +17,7 @@ const persistConfig = {
 const rootReducer = combineReducers({
   defaultValueReducer,
   fieldStateReducer,
+  mapStateReducer,
 });
 
 const persistedReducer = persistReducer(persistConfig, rootReducer);
