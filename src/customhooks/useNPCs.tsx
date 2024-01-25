@@ -3,10 +3,11 @@ import { Component, useEffect, useState } from "react";
 import * as Const from "../const";
 import { npcInstaceType, playerPosType } from "../types/playerTypes";
 import { npcInstances } from "../assets/npcs";
+import { useAppSelector } from "../store/store";
 
 function useNPCs() {
   const [npcArray, setNpcArray] = useState<npcInstaceType[]>(npcInstances);
-
+  const mapState = useAppSelector((state) => state.mapStateReducer.mapAsset);
   const NPCs = (player: playerPosType) => {
     const npcStyle = (npcX: number, npcY: number): React.CSSProperties => {
       return {
@@ -24,7 +25,11 @@ function useNPCs() {
     return (
       <>
         {npcArray.map((npc, i) => {
-          return <div key={i} style={npcStyle(npc.x, npc.y)}></div>;
+          return (
+            mapState.name === npc.locatedMap && (
+              <div key={i} style={npcStyle(npc.x, npc.y)}></div>
+            )
+          );
         })}
       </>
     );

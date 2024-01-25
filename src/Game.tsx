@@ -6,6 +6,7 @@ import usePictureChange from "./customhooks/usePictureChange";
 import useNPCs from "./customhooks/useNPCs";
 import * as Const from "./const";
 import Dialog from "./Dialog";
+import BattleScene from "./components/BattleScene";
 
 function Game() {
   //values -----------------------------------------------------------------------
@@ -39,11 +40,11 @@ function Game() {
           overflow: "hidden",
         }}
       >
-        <Map x={playerPos.x} y={playerPos.y} />
+        {/* <Map x={playerPos.x} y={playerPos.y} />
         <NPCs x={playerPos.x} y={playerPos.y} />
-        {/* {!isMoving && <Dialog />} */}
         <Dialog></Dialog>
-        <Player />
+        <Player /> */}
+        <BattleScene />
       </div>
     </>
   );

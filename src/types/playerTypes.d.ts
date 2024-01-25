@@ -1,3 +1,5 @@
+import { mapNamesType } from "./mapTypes";
+
 export type directionType = "up" | "down" | "left" | "right" | undefined;
 export type playerPosType = {
   x: number;
@@ -15,4 +17,5 @@ export type npcInstaceType = {
   x: number;
   y: number;
   dialog: dialogType;
+  locatedMap: mapNamesType;
 };
