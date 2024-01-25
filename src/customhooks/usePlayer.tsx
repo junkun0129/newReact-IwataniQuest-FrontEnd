@@ -11,6 +11,7 @@ import useDirectionHandler from "./useDirectionHandler";
 import useCollisionController from "./useCollisionController";
 import { useAppDispatch, useAppSelector } from "../store/store";
 import { startTalking } from "../store/slices/fieldStateSlice";
+import { mapChange } from "../store/slices/MapStateSlice";
 function usePlayer(npcArray: npcInstaceType[]) {
   const dispatch = useAppDispatch();
   const fieldState = useAppSelector(
@@ -34,24 +35,35 @@ function usePlayer(npcArray: npcInstaceType[]) {
   const [prePictureDirection, setPrePictureDirection] =
     useState<directionType>();
 
-  const { collisionController, npcCollisionController } =
-    useCollisionController({
-      active: playerPos,
-      direction,
-      npcArray,
-    });
+  const {
+    collisionController,
+    npcCollisionController,
+    doorCollisionController,
+  } = useCollisionController({
+    active: playerPos,
+    direction,
+    npcArray,
+  });
 
   //observe collision by player's position on the DOM
   useEffect(() => {
+    console.log("playerPos :>> ", playerPos);
     const isCollision = collisionController();
     const collisionNpc = npcCollisionController();
-
+    const collisionDoor = doorCollisionController();
     if (isCollision || collisionNpc) {
       if (collisionNpc) {
         dispatch(startTalking(collisionNpc.dialog));
       }
       setIsMoving(false);
       setPreCollisionDirection(direction);
+    }
+
+    if (collisionDoor) {
+      console.log("collisionDoor :>> ", collisionDoor);
+      dispatch(mapChange(collisionDoor.toMapName));
+      console.log("collisionDoor.toPlayerPos :>> ", collisionDoor.toPlayerPos);
+      setPlayerPos(collisionDoor.toPlayerPos);
     }
   }, [playerPos]);
 

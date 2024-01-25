@@ -1,3 +1,5 @@
+import { playerPosType } from "./playerTypes";
+
 export type collisionTileArrayType = number[];
 export type mapUrlType = string;
 export type mapedCollisionMapType = {
@@ -21,4 +23,5 @@ export type doorAssetType = {
   locatedPos: doorPosType;
   toMapName: mapNamesType;
   locatedMapName: mapNamesType;
+  toPlayerPos: playerPosType;
 };

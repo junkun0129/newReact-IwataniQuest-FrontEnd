@@ -8,6 +8,8 @@ import {
 } from "../types/playerTypes";
 import { collisionChecker } from "../helpers/collisionChecker";
 import { useAppSelector } from "../store/store";
+import { doorAssets } from "../assets/doors";
+import { doorAssetType } from "../types/mapTypes";
 
 type useCollisionControllerProps = {
   active: playerPosType;
@@ -54,7 +56,27 @@ function useCollisionController({
     return CollisionNpc;
   };
 
-  return { collisionController, npcCollisionController };
+  let collisionDoor: doorAssetType | null;
+  const doorCollisionController = () => {
+    doorAssets.forEach((door, i) => {
+      if (mapState.name !== door.locatedMapName) return;
+      collisionChecker({
+        direction,
+        passive: door.locatedPos,
+        active,
+        callback: () => {
+          collisionDoor = doorAssets[i];
+        },
+      });
+    });
+    return collisionDoor;
+  };
+
+  return {
+    collisionController,
+    npcCollisionController,
+    doorCollisionController,
+  };
 }
 
 export default useCollisionController;
