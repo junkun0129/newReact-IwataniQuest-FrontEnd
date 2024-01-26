@@ -1,19 +1,24 @@
 import * as React from "react";
-import { Component, useState } from "react";
+import { Component, useEffect, useState } from "react";
 import BattleDialog from "./BattleDialog";
+import { enemiesType } from "../types/enemiesType";
+import { battleSequenceType } from "../types/gameStateTypes";
 function BattleScene() {
-  const playerState = 0;
-  const enemyState = 1;
-  const [state, setState] = useState(playerState);
-  const [count, setCount] = useState(0);
-  const dialog = [
-    "敵が現れた",
-    "おまえのターン",
-    "戦うとか",
-    "敵のターン",
-    "敵の攻撃！、３のダメージ",
-    "お前のターン",
-  ];
+  const [enemies, setEnemies] = useState<enemiesType[]>();
+  const [sequence, setSequence] = useState<battleSequenceType>("start");
+
+  useEffect(() => {
+    switch (sequence) {
+      case "start":
+        break;
+      case "player":
+        break;
+      case "enemy":
+        break;
+      case "end":
+        break;
+    }
+  }, [sequence]);
   return (
     <>
       <div style={wrapper}>

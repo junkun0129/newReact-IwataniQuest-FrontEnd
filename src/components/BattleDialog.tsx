@@ -1,17 +1,9 @@
 import { motion } from "framer-motion";
 import * as React from "react";
-import { Component, useState } from "react";
-import { enemies } from "../assets/enemies";
+import { Component, useEffect, useState } from "react";
+import { enemiesGenerate } from "../helpers/enemiesReducer";
 import { enemiesType } from "../types/enemiesType";
 function BattleDialog() {
-  const maxEnemiesNum = getRandomNumber(1, 3);
-  // console.log(maxEnemiesNum);
-  let choseEnemies: enemiesType[] = [];
-  for (let i = 1; i <= maxEnemiesNum; i++) {
-    const enemyIndex = getRandomNumber(0, enemies.length - 1);
-    choseEnemies.push(enemies[enemyIndex]);
-  }
-  // console.log("choseEnemies :>> ", choseEnemies);
   return (
     <>
       <div style={wrapperStyle} onClick={() => console.log("object")}>
@@ -60,7 +52,3 @@ const containerStyle: React.CSSProperties = {
   justifyContent: "center",
   alignItems: "center",
 };
-function getRandomNumber(min: number, max: number): number {
-  // Math.floorは小数点以下を切り捨てるため、結果は整数になります
-  return Math.floor(Math.random() * (max - min + 1)) + min;
-}
