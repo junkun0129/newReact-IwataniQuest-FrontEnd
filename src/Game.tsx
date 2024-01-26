@@ -10,7 +10,6 @@ import BattleScene from "./components/BattleScene";
 
 function Game() {
   //values -----------------------------------------------------------------------
-
   const gameLoopRef = useRef<any>(null);
   const { NPCs, npcArray } = useNPCs();
   const { direction, isMoving, playerPos, Player, playerUpdate } =
