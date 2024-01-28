@@ -19,3 +19,9 @@ export type npcInstaceType = {
   dialog: dialogType;
   locatedMap: mapNamesType;
 };
+
+export type playerStatsType = {
+  name: string;
+  hp: number;
+  at: number;
+};

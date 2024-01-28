@@ -27,8 +27,12 @@ export const fieldStateSlice = createSlice({
         dialog: null,
       };
     },
+    changeFieldState: (state, action: PayloadAction<fieldStateType>) => {
+      state.fieldState = action.payload;
+    },
   },
 });
 
 export const fieldStateReducer = fieldStateSlice.reducer;
-export const { startTalking, endTalking } = fieldStateSlice.actions;
+export const { startTalking, endTalking, changeFieldState } =
+  fieldStateSlice.actions;

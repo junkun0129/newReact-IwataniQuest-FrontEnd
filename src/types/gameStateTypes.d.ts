@@ -1,2 +1,7 @@
-export type fieldStateType = "walk" | "event" | "talk";
-export type battleSequenceType = "started" | "player" | "enemy" | "end";
+export type fieldStateType = "walk" | "event" | "talk" | "battle";
+export type battleSequenceType =
+  | "start"
+  | "player-select"
+  | "player-move"
+  | "enemy-move"
+  | "end";

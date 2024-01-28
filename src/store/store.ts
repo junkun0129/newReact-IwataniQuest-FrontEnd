@@ -8,6 +8,7 @@ import { TypedUseSelectorHook } from "react-redux";
 import { defaultValueReducer } from "./slices/defaultValuesSlice";
 import { fieldStateReducer } from "./slices/fieldStateSlice";
 import { mapStateReducer } from "./slices/MapStateSlice";
+import { battleSystemReducer } from "./slices/BattleSystemSlice";
 const persistConfig = {
   key: "root",
   version: 1,
@@ -18,6 +19,7 @@ const rootReducer = combineReducers({
   defaultValueReducer,
   fieldStateReducer,
   mapStateReducer,
+  battleSystemReducer,
 });
 
 const persistedReducer = persistReducer(persistConfig, rootReducer);
