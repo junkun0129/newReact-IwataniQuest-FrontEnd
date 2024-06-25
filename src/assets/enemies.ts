@@ -1,4 +1,4 @@
-import { enemiyType } from "../types/enemiesType";
+import { enemiesType } from "../types/enemiesType";
 
 export const enemies: enemiesType[] = [
   { name: "slime", hp: 10, at: 2 },

@@ -13,6 +13,7 @@ function BattleDialog({}: Props) {
   const dispatch = useAppDispatch();
   const [dialogCount, setdialogCount] = useState(0);
   const [displayedDialog, setdisplayedDialog] = useState<string>("");
+
   const battleDialog = useAppSelector(
     (state) => state.battleSystemReducer.battleDialog
   );
@@ -27,8 +28,8 @@ function BattleDialog({}: Props) {
   useEffect(() => {
     if (fieldState === "battle") {
       document.addEventListener("keydown", handleKeyDown);
+      if (fieldState !== "battle") {
     }
-    if (fieldState !== "battle") {
       document.removeEventListener("keydown", handleKeyDown);
     }
   }, [fieldState]);
@@ -69,9 +70,7 @@ function BattleDialog({}: Props) {
       <div style={wrapperStyle}>
         <div style={containerStyle}>
           {sequence === "player-select" ? (
-            <>
-              <BattleSelectPanel />
-            </>
+            <BattleSelectPanel />
           ) : (
             displayedDialog
           )}

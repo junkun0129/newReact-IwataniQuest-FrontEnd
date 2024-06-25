@@ -5,3 +5,5 @@ export type battleSequenceType =
   | "player-move"
   | "enemy-move"
   | "end";
+
+export type commandType = "fight" | "magic" | "item" | "escape" | null;

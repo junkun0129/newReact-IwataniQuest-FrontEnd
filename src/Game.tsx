@@ -2,37 +2,27 @@ import * as React from "react";
 import { Component, useEffect, useRef, useState } from "react";
 import Map from "./Map";
 import usePlayer from "./customhooks/usePlayer";
-import usePictureChange from "./customhooks/usePictureChange";
 import useNPCs from "./customhooks/useNPCs";
-import * as Const from "./const";
 import Dialog from "./Dialog";
 import BattleScene from "./components/BattleScene";
 import { motion } from "framer-motion";
 import { encounter } from "./helpers/functions";
-import useEncounter from "./customhooks/useEncouner";
-import { useAppDispatch, useAppSelector } from "./store/store";
-import {
-  battleStart,
-  enemiesAttack,
-  playerAttack,
-} from "./store/slices/BattleSystemSlice";
 import { enemiesGenerate } from "./helpers/enemiesReducer";
-import { changeFieldState } from "./store/slices/fieldStateSlice";
-
-function Game() {
+import { enemiesType } from "./types/enemiesType";
+import { Player } from "./types/playerTypes";
+type Props = { player: Player };
+function Game({ player }: Props) {
   //values -----------------------------------------------------------------------
+
   const gameLoopRef = useRef<any>(null);
-  const { NPCs, npcArray } = useNPCs();
-  const { direction, isMoving, playerPos, Player, playerUpdate } =
-    usePlayer(npcArray);
+
+  const { NPCs, npcArray } = useNPCs({ mapState: "dami1" });
+  const { direction, isMoving, playerPos, Player, playerUpdate } = usePlayer(
+    npcArray,
+    player.position
+  );
   let encounterCoolDown = 0;
-  const fieldState = useAppSelector(
-    (state) => state.fieldStateReducer.fieldState
-  );
-  const battleState = useAppSelector(
-    (state) => state.battleSystemReducer.sequence
-  );
-  const dispatch = useAppDispatch();
+  const [fieldState, setfieldState] = useState<"walk" | "battle">("walk");
   // useEffects -----------------------------------------------------------------------
   useEffect(() => {
     gameloop();
@@ -43,21 +33,20 @@ function Game() {
 
   //const functions -----------------------------------------------------------------------
   const gameloop = () => {
-    //encounter
-    if (fieldState === "walk") {
-      encounterCoolDown -= 10;
-      encounter(encounterCoolDown, (encountSetNum) => {
-        encounterCoolDown = encountSetNum;
-        const enemiesGenerated = enemiesGenerate();
-        dispatch(changeFieldState("battle"));
-        dispatch(battleStart({ enemiesStats: enemiesGenerated }));
-      });
+    if (fieldState !== "battle") {
+      handleEncount();
     }
-
     playerUpdate();
     gameLoopRef.current = requestAnimationFrame(gameloop);
   };
 
+  const handleEncount = () => {
+    encounterCoolDown -= 10;
+    encounter(encounterCoolDown, (encountSetNum) => {
+      encounterCoolDown = encountSetNum;
+      setfieldState("battle");
+    });
+  };
   return (
     <>
       <div
@@ -84,39 +73,7 @@ function Game() {
             fieldState === "battle" ? { display: "block" } : { display: "none" }
           }
         >
-          <BattleScene />
-        </motion.div>
-
-        <motion.div
-          drag
-          style={{
-            position: "absolute",
-            width: "500px",
-            height: "100px",
-            border: "1px black solid",
-          }}
-        >
-          <button onClick={() => dispatch(changeFieldState("battle"))}>
-            to Battle
-          </button>
-          <button onClick={() => dispatch(changeFieldState("walk"))}>
-            to Field
-          </button>
-          <h1>current state : {fieldState}</h1>
-          <button
-            onClick={() =>
-              dispatch(battleStart({ enemiesStats: enemiesGenerate() }))
-            }
-          >
-            battleStart
-          </button>
-          <button onClick={() => dispatch(playerAttack(0))}>
-            playerattack
-          </button>
-          <button onClick={() => dispatch(enemiesAttack())}>
-            enemiesAttack
-          </button>
-          <h1>{battleState}</h1>
+          <BattleScene player={player} />
         </motion.div>
       </div>
     </>

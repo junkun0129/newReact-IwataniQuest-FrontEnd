@@ -1,6 +1,6 @@
 import * as React from "react";
 import { Component, useState } from "react";
-import { collisionArray } from "../assets/collisionTiles";
+import { collisionArray, mapDamiData } from "../assets/collisionTiles";
 import {
   directionType,
   npcInstaceType,
@@ -21,12 +21,10 @@ function useCollisionController({
   direction,
   npcArray,
 }: useCollisionControllerProps) {
-  const mapState = useAppSelector((state) => state.mapStateReducer.mapAsset);
-
   let isCollision = false;
 
   const collisionController = () => {
-    mapState.collisionTileArray.forEach((collisionBlock, i) => {
+    mapDamiData[0].collisionTileArray.forEach((collisionBlock, i) => {
       collisionChecker({
         direction,
         passive: collisionBlock,
@@ -59,7 +57,7 @@ function useCollisionController({
   let collisionDoor: doorAssetType | null;
   const doorCollisionController = () => {
     doorAssets.forEach((door, i) => {
-      if (mapState.name !== door.locatedMapName) return;
+      if (mapDamiData[0].name !== door.locatedMapName) return;
       collisionChecker({
         direction,
         passive: door.locatedPos,

@@ -1,5 +1,3 @@
-import { damiMapCollisionTilesArray } from "./assets/collisionTiles";
-import { mapAssetsType } from "./types/mapTypes";
 import { directionType, picturePxType } from "./types/playerTypes";
 
 type mapGridNumType = {

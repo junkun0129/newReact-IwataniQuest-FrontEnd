@@ -25,3 +25,22 @@ export type playerStatsType = {
   hp: number;
   at: number;
 };
+
+export type Player = {
+  user_id: string;
+  user_name: string;
+  status: {
+    hp: number;
+    ap: number;
+    mp: number;
+    lev: number;
+    magics: Magic[];
+  };
+  position: playerPosType;
+};
+export type Magic = {
+  magic_id: string;
+  magic_name: string;
+  magic_type: string;
+  magic_ap: number;
+};

@@ -165,7 +165,7 @@ export const mapedDamiMap2TilesArray: mapedCollisionMapType[] = collisionArray(
   damiMap2CollisionTilesArray
 );
 
-export const mapAssets: mapAssetsType[] = [
+export const mapDamiData: mapAssetsType[] = [
   {
     name: "dami1",
     mapUrl: "DamiMap.png",

@@ -9,19 +9,9 @@ import {
 } from "../types/playerTypes";
 import useDirectionHandler from "./useDirectionHandler";
 import useCollisionController from "./useCollisionController";
-import { useAppDispatch, useAppSelector } from "../store/store";
-import { startTalking } from "../store/slices/fieldStateSlice";
-import { mapChange } from "../store/slices/MapStateSlice";
-function usePlayer(npcArray: npcInstaceType[]) {
-  const dispatch = useAppDispatch();
-  const fieldState = useAppSelector(
-    (state) => state.fieldStateReducer.fieldState
-  );
+function usePlayer(npcArray: npcInstaceType[], initialPosition: playerPosType) {
   const direction = useDirectionHandler();
-  const [playerPos, setPlayerPos] = useState<playerPosType>({
-    x: 1000,
-    y: 600,
-  });
+  const [playerPos, setPlayerPos] = useState<playerPosType>(initialPosition);
   const [isMoving, setIsMoving] = useState<boolean>(true);
   const [preCollisionDirection, setPreCollisionDirection] =
     useState<directionType>();
@@ -35,6 +25,9 @@ function usePlayer(npcArray: npcInstaceType[]) {
   const [prePictureDirection, setPrePictureDirection] =
     useState<directionType>();
 
+  useEffect(() => {
+    console.log(playerPos);
+  }, [playerPos]);
   const {
     collisionController,
     npcCollisionController,
@@ -47,22 +40,15 @@ function usePlayer(npcArray: npcInstaceType[]) {
 
   //observe collision by player's position on the DOM
   useEffect(() => {
-    console.log("playerPos :>> ", playerPos);
     const isCollision = collisionController();
     const collisionNpc = npcCollisionController();
     const collisionDoor = doorCollisionController();
     if (isCollision || collisionNpc) {
-      if (collisionNpc) {
-        dispatch(startTalking(collisionNpc.dialog));
-      }
       setIsMoving(false);
       setPreCollisionDirection(direction);
     }
 
     if (collisionDoor) {
-      console.log("collisionDoor :>> ", collisionDoor);
-      dispatch(mapChange(collisionDoor.toMapName));
-      console.log("collisionDoor.toPlayerPos :>> ", collisionDoor.toPlayerPos);
       setPlayerPos(collisionDoor.toPlayerPos);
     }
   }, [playerPos]);
@@ -79,7 +65,6 @@ function usePlayer(npcArray: npcInstaceType[]) {
   }, [direction]);
 
   const directionHandler = (direction: directionType) => {
-    // if (fieldState !== "walk") return;
     let isCalled: boolean = false;
     if (!isMoving) return;
     if (preCollisionDirection === direction) {
@@ -131,7 +116,6 @@ function usePlayer(npcArray: npcInstaceType[]) {
 
   //update
   const playerUpdate = () => {
-    if (fieldState !== "walk") return;
     directionHandler(direction);
     setFrameCount((pre) => pre + 1);
   };
@@ -143,7 +127,6 @@ function usePlayer(npcArray: npcInstaceType[]) {
       height: `${Const.screenTileSize}px`,
       backgroundImage: "url(sample.png)",
       backgroundPosition: `${picturePx.row}px ${picturePx.column}px`,
-      // backgroundSize: `300%`,
       transform: `translate(calc(50vw), calc(50vh))`,
     };
     return <div style={playerStyle}></div>;
