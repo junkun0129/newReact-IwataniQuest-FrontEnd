@@ -1,10 +1,13 @@
 import * as React from "react";
 import { Component, useEffect, useState } from "react";
-import { useAppSelector } from "../store/store";
 import BattleSelectPanel from "./BattleSelectPanel";
 import { enemiesType } from "../types/enemiesType";
 import { Player } from "../types/playerTypes";
 import { enemiesGenerate } from "../helpers/enemiesReducer";
+import {
+  getRandomElementsFromArray,
+  getRandomUniqueNumbers,
+} from "../helpers/functions";
 type Props = {
   playerProp: Player;
 };
@@ -18,22 +21,47 @@ function BattleScene({ playerProp }: Props) {
     nextSequence: Sequence | null;
     selectedDialogIndex: number;
   }>({ dialog: [], nextSequence: null, selectedDialogIndex: 0 });
+
   useEffect(() => {
     const newEnemeis = enemiesGenerate();
     setnemies(newEnemeis);
   }, []);
 
   useEffect(() => {
-    if (sequence === "enemiesAttack") {
-      // write the code for enemies attack
-    }
+    console.log(sequence);
+    handleSequence();
   }, [sequence]);
+
+  useEffect(() => {
+    console.log(dialogStats);
+  }, [dialogStats]);
+  const handleSequence = () => {
+    if (sequence === "enemiesAttack") {
+      enemiesAttack();
+    }
+  };
+
+  const enemiesAttack = () => {
+    const activeIndexs = getRandomUniqueNumbers(0, enemies?.length - 1);
+    console.log(activeIndexs);
+    activeIndexs.map((index) => {
+      const activeEnemy = enemies[index];
+      const newLines = [
+        `${activeEnemy.name}のこうげき！`,
+        `${activeEnemy.at}のダメージ！`,
+      ];
+      const newDialogs = [...dialogStats.dialog, ...newLines];
+      setdialogStats((pre) => ({ ...pre, dialog: newDialogs }));
+    });
+    setdialogStats((pre) => ({ ...pre, nextSequence: "select" }));
+  };
 
   const handleMove = (selectedStats: {
     label: string;
     ap: number;
     targetIndex: number;
   }) => {
+    console.log("object");
     const { label, ap, targetIndex } = selectedStats;
     const targetName = enemies[targetIndex].name;
     setSequence("playerAttackResult");
@@ -53,8 +81,8 @@ function BattleScene({ playerProp }: Props) {
   };
   const handleDialogClick = () => {
     const { selectedDialogIndex, dialog, nextSequence } = dialogStats;
-    const newSelectedDialogIndex = selectedDialogIndex + 1;
-    if (selectedDialogIndex < dialog.length) {
+    if (selectedDialogIndex < dialog.length - 1) {
+      const newSelectedDialogIndex = selectedDialogIndex + 1;
       setdialogStats((pre) => ({
         ...pre,
         selectedDialogIndex: newSelectedDialogIndex,
@@ -97,8 +125,11 @@ function BattleScene({ playerProp }: Props) {
               onMove={handleMove}
             />
           )}
-          {sequence === "playerAttackResult" && (
-            <div onClick={handleDialogClick} className="">
+          {sequence !== "select" && (
+            <div
+              onClick={handleDialogClick}
+              className="w-full h-full bg-blue-300"
+            >
               {dialogStats.dialog[dialogStats.selectedDialogIndex]}
             </div>
           )}

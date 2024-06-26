@@ -2,6 +2,7 @@ import { useState } from "react";
 import BattleSelectButton from "./BattleSelectButton";
 import { Player } from "../types/playerTypes";
 import { enemiesType } from "../types/enemiesType";
+import { motion } from "framer-motion";
 type OnMove = {
   label: string;
   ap: number;
@@ -45,9 +46,8 @@ function BattleSelectPanel({ onMove, player, enemies }: Props) {
       ...pre,
       targetIndex: index,
     }));
-    console.log("object");
     console.log(ap, label, targetIndex);
-    if (ap && label && targetIndex) {
+    if (ap && label && targetIndex !== null) {
       console.log("object");
       onMove({ ap, label, targetIndex });
     }
@@ -61,7 +61,7 @@ function BattleSelectPanel({ onMove, player, enemies }: Props) {
   return (
     <>
       {mode === "main" && (
-        <>
+        <div className="w-full h-full bg-blue-300">
           <BattleSelectButton label={"こうげき"} onclick={selectAttack} />
           <BattleSelectButton
             label={"まほう"}
@@ -75,7 +75,7 @@ function BattleSelectPanel({ onMove, player, enemies }: Props) {
             label={"にげる"}
             onclick={(label) => setmode("escape")}
           />
-        </>
+        </div>
       )}
       {mode === "magic" && (
         <>
@@ -93,13 +93,14 @@ function BattleSelectPanel({ onMove, player, enemies }: Props) {
       {mode === "enemyselect" && (
         <>
           {enemies.map((enemy, i) => (
-            <h1
-              className="cursor-pointer"
-              onClick={() => handleSelectEnemy(i)}
+            <motion.h1
+              whileHover={{ border: "black solid 1px" }}
+              className="cursor-pointer w-full h-[10%] bg-blue-200"
+              onTap={() => handleSelectEnemy(i)}
               key={"enemy-select-" + i}
             >
               {enemy.name}
-            </h1>
+            </motion.h1>
           ))}
         </>
       )}

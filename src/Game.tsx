@@ -7,8 +7,6 @@ import Dialog from "./Dialog";
 import BattleScene from "./components/BattleScene";
 import { motion } from "framer-motion";
 import { encounter } from "./helpers/functions";
-import { enemiesGenerate } from "./helpers/enemiesReducer";
-import { enemiesType } from "./types/enemiesType";
 import { Player } from "./types/playerTypes";
 type Props = { player: Player };
 function Game({ player }: Props) {
@@ -73,7 +71,7 @@ function Game({ player }: Props) {
             fieldState === "battle" ? { display: "block" } : { display: "none" }
           }
         >
-          <BattleScene player={player} />
+          <BattleScene playerProp={player} />
         </motion.div>
       </div>
     </>
